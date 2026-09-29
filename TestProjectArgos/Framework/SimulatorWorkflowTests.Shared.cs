@@ -11,7 +11,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.Intrinsics.X86;
 using System.Threading;
 using System.Collections.Generic;
 
@@ -22,183 +21,101 @@ namespace SimulatorAutomation.Tests
     public partial class SimulatorWorkflowTests
     {
 
-        // ============================================================
-        // WAIT CONFIGURATION
-        // ============================================================
+        protected const int MovuStartupWaitMilliseconds = 60000;
 
-        protected const int MovuStartupWaitMilliseconds =
-            60000;
+        protected const int MovuWindowSearchTimeoutMilliseconds = 60000;
 
-        protected const int MovuWindowSearchTimeoutMilliseconds =
-            60000;
+        protected const int MinimizeButtonSearchTimeoutMilliseconds = 50000;
 
-        protected const int MinimizeButtonSearchTimeoutMilliseconds =
-            50000;
+        protected const int AfterMovuMinimizeWaitMilliseconds = 5000;
 
-        protected const int AfterMovuMinimizeWaitMilliseconds =
-            5000;
+        protected const int VisionPlannerWindowSearchTimeoutMilliseconds = 100000;
 
-        protected const int VisionPlannerWindowSearchTimeoutMilliseconds =
-            100000;
+        protected const int LoginItemSearchTimeoutMilliseconds = 120000;
 
-        protected const int LoginItemSearchTimeoutMilliseconds =
-            120000;
+        protected const int LoginFormSearchTimeoutMilliseconds = 120000;
 
-        protected const int LoginFormSearchTimeoutMilliseconds =
-            120000;
+        protected const int LoginResultTimeoutMilliseconds = 120000;
 
-        protected const int LoginResultTimeoutMilliseconds =
-            120000;
+        protected const int PollingIntervalMilliseconds = 1000;
+        protected const int NewpatientButtoninterval = 200000;
 
-        protected const int PollingIntervalMilliseconds =
-            1000;
-        protected const int NewpatientButtoninterval =
-            200000;
+        protected const string MovuWindowTitle = "Argos Biometer Simulator";
 
-        // ============================================================
-        // STABLE APPLICATION DETAILS
-        // ============================================================
+        protected const string MovuMinimizeButtonAutomationId = "MinimizeBtn";
 
-        protected const string MovuWindowTitle =
-            "Argos Biometer Simulator";
+        protected const string VisionPlannerWindowTitle = "Vision Planner";
 
-        protected const string MovuMinimizeButtonAutomationId =
-            "MinimizeBtn";
+        protected const string RecentUsersListAutomationId = "LoginRecentUsersList";
 
-        protected const string VisionPlannerWindowTitle =
-            "Vision Planner";
+        protected const string UserNameTextBoxAutomationId = "ParamTxtBox";
 
-        protected const string RecentUsersListAutomationId =
-            "LoginRecentUsersList";
+        protected const string PasswordTextBoxAutomationId = "PasswordEditInLogin";
 
-        protected const string UserNameTextBoxAutomationId =
-            "ParamTxtBox";
+        protected const string LoginButtonAutomationId = "LoginButton";
 
-        protected const string PasswordTextBoxAutomationId =
-            "PasswordEditInLogin";
+        protected const string LoginErrorTextAutomationId = "ErrorTextBox";
 
-        protected const string LoginButtonAutomationId =
-            "LoginButton";
+        protected const string NewPatientButtonName = "+ New Patient";
 
-        protected const string LoginErrorTextAutomationId =
-            "ErrorTextBox";
-
-        protected const string NewPatientButtonName =
-            "+ New Patient";
-
-        // SHARED OBJECTS
         protected UIA3Automation _automation;
 
         protected AutomationConfig _config;
-        // ============================================================
-        // PATIENT VERIFICATION DETAILS
-        // ============================================================
 
-        protected const string CreatedPatientNameAutomationId =
-            "MarkedNameText";
+        protected const string CreatedPatientNameAutomationId = "MarkedNameText";
 
-        protected const int PatientCreationVerificationTimeoutMilliseconds =
-            120000;
+        protected const int PatientCreationVerificationTimeoutMilliseconds = 120000;
 
-        // ============================================================
-        // PATIENT SEARCH DETAILS
-        // ============================================================
+        protected const string PatientSearchTextBoxAutomationId = "Search Item";
 
-        protected const string PatientSearchTextBoxAutomationId =
-            "Search Item";
+        protected const string PatientSearchResetAutomationId = "Reset Search";
 
-        protected const string PatientSearchResetAutomationId =
-            "Reset Search";
+        protected const int PatientSearchTimeoutMilliseconds = 120000;
 
-        protected const int PatientSearchTimeoutMilliseconds =
-            120000;
+        protected const string NewImageGuidedMeasurementButtonName = "New Image Guided Measurement";
 
-        // ============================================================
-        // CAPTURE MEASUREMENT CONFIGURATION
-        // ============================================================
+        protected const string MovuMeasurementControlAutomationId = "Mainy";
 
-        protected const string NewImageGuidedMeasurementButtonName =
-            "New Image Guided Measurement";
+        protected const int CaptureMeasurementTimeoutMilliseconds = 180000;
 
-        protected const string MovuMeasurementControlAutomationId =
-            "Mainy";
+        protected const string MovuTaskbarButtonPartialName = "MovuSimulator";
 
-        protected const int CaptureMeasurementTimeoutMilliseconds =
-            180000;
-        // ============================================================
-        // MOVU TASKBAR DETAILS
-        // ============================================================
+        protected const string MovuTaskbarButtonAutomationIdPartialText = "ArgosBiometerSimulator.exe";
 
-        protected const string MovuTaskbarButtonPartialName =
-            "MovuSimulator";
+        protected const int MovuTaskbarButtonTimeoutMilliseconds = 30000;
 
-        protected const string MovuTaskbarButtonAutomationIdPartialText =
-            "ArgosBiometerSimulator.exe";
+        protected const string MovuTaskbarButtonNamePartialText = "MovuSimulator";
 
-        protected const int MovuTaskbarButtonTimeoutMilliseconds =
-            30000;
-        // ============================================================
-        // MOVU CAPTURE-MEASUREMENT CONFIGURATION
-        // ============================================================
+        protected const string MovuTaskbarAutomationIdPartialText = "ArgosBiometerSimulator.exe";
 
-        protected const string MovuTaskbarButtonNamePartialText =
-            "MovuSimulator";
+        protected const int MovuTaskbarSearchTimeoutMilliseconds = 30000;
 
-        protected const string MovuTaskbarAutomationIdPartialText =
-            "ArgosBiometerSimulator.exe";
+        protected const string MovuOdButtonAutomationId = "SwitchToODArrow";
 
-        protected const int MovuTaskbarSearchTimeoutMilliseconds =
-            30000;
-        // ============================================================
-        // MOVU MEASUREMENT CAPTURE CONTROLS
-        // ============================================================
+        protected const string MovuOsButtonAutomationId = "SwitchToOSArrow";
 
-        protected const string MovuOdButtonAutomationId =
-            "SwitchToODArrow";
+        protected const string MovuJoystickButtonAutomationId = "Joystick1";
 
-        protected const string MovuOsButtonAutomationId =
-            "SwitchToOSArrow";
+        protected const string MovuAcceptButtonAutomationId = "btnAcceptRI";
 
-        protected const string MovuJoystickButtonAutomationId =
-            "Joystick1";
+        protected const string MovuFinishButtonAutomationId = "FinishBtn";
 
-        protected const string MovuAcceptButtonAutomationId =
-            "btnAcceptRI";
+        protected const int MovuCaptureControlTimeoutMilliseconds = 60000;
 
-        protected const string MovuFinishButtonAutomationId =
-            "FinishBtn";
+        protected const int MovuMeasurementProcessingWaitMilliseconds = 2000;
 
-        protected const int MovuCaptureControlTimeoutMilliseconds =
-            60000;
+        protected const int MovuAcceptProcessingWaitMilliseconds = 1500;
 
-        protected const int MovuMeasurementProcessingWaitMilliseconds =
-            2000;
+        protected const int MeasurementsPerEye = 1;
+        protected const string MovuFinishConfirmationWindowTitle = "Vision Planner Confirmation";
 
-        protected const int MovuAcceptProcessingWaitMilliseconds =
-            1500;
+        protected const string MovuFinishConfirmationYesAutomationId = "ConfirmationBox::Yes";
 
-        protected const int MeasurementsPerEye =
-            1;
-        protected const string MovuFinishConfirmationWindowTitle =
-    "Vision Planner Confirmation";
+        protected const int MovuFinishConfirmationTimeoutMilliseconds = 60000;
 
-        protected const string MovuFinishConfirmationYesAutomationId =
-            "ConfirmationBox::Yes";
+        protected const string BackToPatientListAutomationId = "BackToPatientList";
 
-        protected const int MovuFinishConfirmationTimeoutMilliseconds =
-            60000;
-        // ============================================================
-        // BACK TO PATIENT LIST
-        // ============================================================
-
-        protected const string BackToPatientListAutomationId =
-            "BackToPatientList";
-
-        protected const int BackToPatientListTimeoutMilliseconds =
-            60000;
-        // ============================================================
-        // ONE-TIME SETUP
-        // ============================================================
+        protected const int BackToPatientListTimeoutMilliseconds = 60000;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -224,10 +141,6 @@ namespace SimulatorAutomation.Tests
                 "UIA3Automation initialized successfully.");
         }
 
-        // ============================================================
-        // READ VISION PLANNER PASSWORD
-        // ============================================================
-
         protected string ReadVisionPlannerPassword()
         {
             string passwordValue =
@@ -239,9 +152,6 @@ namespace SimulatorAutomation.Tests
                     "Password configuration is not set in the Excel workbook.");
             }
 
-            /*
-             * If it contains @ or ., it's likely a direct password value.
-             */
             if (passwordValue.Contains("@") || passwordValue.Contains("."))
             {
                 TestContext.Progress.WriteLine(
@@ -250,9 +160,6 @@ namespace SimulatorAutomation.Tests
                 return passwordValue;
             }
 
-            /*
-             * Otherwise, treat it as an environment variable name.
-             */
             string password =
                 Environment.GetEnvironmentVariable(passwordValue);
 
@@ -275,17 +182,10 @@ namespace SimulatorAutomation.Tests
             return password;
         }
 
-        // ============================================================
-        // CLICK OTHER USERS WITH RETRY
-        // ============================================================
-
         protected bool ClickOtherUsersWithRetry(
             int totalTimeoutMilliseconds)
         {
-            /*
-             * Wait for the "Other Users" tile to be present and visible
-             * before attempting to click it.
-             */
+
             TestContext.Progress.WriteLine(
                 "Waiting for '" +
                 _config.VisionPlannerLoginTileName +
@@ -344,10 +244,6 @@ namespace SimulatorAutomation.Tests
                     continue;
                 }
 
-                /*
-                 * A previous click may already have opened the
-                 * username/password screen.
-                 */
                 if (IsPasswordScreenVisible(
                         visionPlannerWindow))
                 {
@@ -363,10 +259,6 @@ namespace SimulatorAutomation.Tests
 
                 Thread.Sleep(1000);
 
-                /*
-                 * Re-find the tile before every attempt.
-                 * WPF can recreate the ListItem after focus changes.
-                 */
                 AutomationElement currentTile =
                     FindLoginListItemByChildText(
                         visionPlannerWindow,
@@ -398,12 +290,6 @@ namespace SimulatorAutomation.Tests
                 var rectangle =
                     currentTile.BoundingRectangle;
 
-                /*
-                 * Reject stale UI Automation coordinates.
-                 *
-                 * WPF carousel elements can report very large
-                 * negative coordinates even when IsOffscreen is false.
-                 */
                 if (rectangle.Left < 0 ||
                     rectangle.Top < 0 ||
                     rectangle.Width <= 0 ||
@@ -495,10 +381,6 @@ namespace SimulatorAutomation.Tests
             return false;
         }
 
-        // ============================================================
-        // WAIT FOR PASSWORD SCREEN
-        // ============================================================
-
         protected bool WaitForPasswordScreen(
             int timeoutMilliseconds)
         {
@@ -530,10 +412,6 @@ namespace SimulatorAutomation.Tests
 
             return false;
         }
-
-        // ============================================================
-        // CHECK WHETHER PASSWORD SCREEN IS VISIBLE
-        // ============================================================
 
         protected bool IsPasswordScreenVisible(
             Window visionPlannerWindow)
@@ -575,10 +453,6 @@ namespace SimulatorAutomation.Tests
             }
         }
 
-        // ============================================================
-        // WAIT FOR COMPLETE LOGIN FORM
-        // ============================================================
-
         protected bool WaitForLoginForm(
             int timeoutMilliseconds)
         {
@@ -612,10 +486,6 @@ namespace SimulatorAutomation.Tests
 
             return false;
         }
-
-        // ============================================================
-        // CHECK WHETHER COMPLETE LOGIN FORM IS VISIBLE
-        // ============================================================
 
         protected bool IsLoginFormVisible(
             Window visionPlannerWindow)
@@ -675,10 +545,6 @@ namespace SimulatorAutomation.Tests
             }
         }
 
-        // ============================================================
-        // ENTER USERNAME AND PASSWORD
-        // ============================================================
-
         protected void EnterVisionPlannerCredentials(
             string userName,
             string password)
@@ -709,10 +575,6 @@ namespace SimulatorAutomation.Tests
 
             Thread.Sleep(500);
 
-            // ========================================================
-            // USERNAME FIELD
-            // ========================================================
-
             AutomationElement userNameField =
                 WaitForVisibleElementByAutomationId(
                    VisionPlannerWindowTitle,
@@ -734,15 +596,6 @@ namespace SimulatorAutomation.Tests
                 userName,
                 "Username field",
                 false);
-
-            /*
-             * Re-find the password field after entering username.
-             * WPF can regenerate controls after a value changes.
-             */
-
-            // ========================================================
-            // PASSWORD FIELD
-            // ========================================================
 
             AutomationElement passwordField =
                 WaitForVisibleElementByAutomationId(
@@ -769,10 +622,6 @@ namespace SimulatorAutomation.Tests
             TestContext.Progress.WriteLine(
                 "Username and password entered successfully.");
         }
-
-        // ============================================================
-        // ENTER TEXT USING KEYBOARD
-        // ============================================================
 
         protected static void SetTextUsingKeyboard(
             AutomationElement element,
@@ -864,9 +713,6 @@ namespace SimulatorAutomation.Tests
                 "Selecting all text in " +
                 elementDescription);
 
-            /*
-             * Select and clear any existing value.
-             */
             Keyboard.TypeSimultaneously(
                 VirtualKeyShort.CONTROL,
                 VirtualKeyShort.KEY_A);
@@ -882,9 +728,6 @@ namespace SimulatorAutomation.Tests
                 "Typing text into " +
                 elementDescription);
 
-            /*
-             * Enter the new value.
-             */
             Keyboard.Type(value);
 
             Thread.Sleep(500);
@@ -903,10 +746,6 @@ namespace SimulatorAutomation.Tests
                     value);
             }
         }
-
-        // ============================================================
-        // CLICK VISION PLANNER LOGIN BUTTON
-        // ============================================================
 
         protected void ClickVisionPlannerLoginButton()
         {
@@ -955,10 +794,6 @@ namespace SimulatorAutomation.Tests
                 "Vision Planner Login button clicked.");
         }
 
-        // ============================================================
-        // WAIT FOR LOGIN RESULT
-        // ============================================================
-
         protected bool WaitForLoginResult(
             int timeoutMilliseconds)
         {
@@ -972,10 +807,6 @@ namespace SimulatorAutomation.Tests
                     FindWindowByTitle(
                        VisionPlannerWindowTitle);
 
-                /*
-                 * Vision Planner can replace or rename the login
-                 * window after successful authentication.
-                 */
                 if (visionPlannerWindow == null)
                 {
                     TestContext.Progress.WriteLine(
@@ -1015,10 +846,6 @@ namespace SimulatorAutomation.Tests
                 bool loginButtonVisible =
                     IsElementVisible(loginButton);
 
-                /*
-                 * WPF may retain the controls in the automation tree.
-                 * Therefore, check visibility rather than null only.
-                 */
                 if (!passwordVisible &&
                     !loginButtonVisible)
                 {
@@ -1038,10 +865,6 @@ namespace SimulatorAutomation.Tests
 
             return false;
         }
-
-        // ============================================================
-        // GET VISIBLE LOGIN ERROR
-        // ============================================================
 
         protected string GetVisibleLoginError(
             Window visionPlannerWindow)
@@ -1088,10 +911,6 @@ namespace SimulatorAutomation.Tests
                 return string.Empty;
             }
         }
-
-        // ============================================================
-        // FIND LOGIN LIST ITEM BY CHILD TEXT
-        // ============================================================
 
         protected AutomationElement FindLoginListItemByChildText(
             Window parentWindow,
@@ -1203,10 +1022,6 @@ namespace SimulatorAutomation.Tests
             return null;
         }
 
-        // ============================================================
-        // WAIT FOR LOGIN LIST ITEM
-        // ============================================================
-
         protected AutomationElement WaitForLoginListItemByChildText(
             string partialTileName,
             int timeoutMilliseconds)
@@ -1243,10 +1058,6 @@ namespace SimulatorAutomation.Tests
 
             return null;
         }
-
-        // ============================================================
-        // WAIT FOR VISIBLE ELEMENT BY AUTOMATION ID
-        // ============================================================
 
         protected AutomationElement WaitForVisibleElementByAutomationId(
             string windowTitle,
@@ -1299,10 +1110,6 @@ namespace SimulatorAutomation.Tests
 
             return null;
         }
-
-        // ============================================================
-        // CLICK ELEMENT CENTER WITH MOUSE
-        // ============================================================
 
         protected static void ClickElementCenterWithMouse(
             AutomationElement element,
@@ -1363,10 +1170,6 @@ namespace SimulatorAutomation.Tests
             Thread.Sleep(1000);
         }
 
-        // ============================================================
-        // CHECK ELEMENT VISIBILITY AND SCREEN POSITION
-        // ============================================================
-
         protected static bool IsElementVisible(
             AutomationElement element)
         {
@@ -1396,9 +1199,6 @@ namespace SimulatorAutomation.Tests
                     return false;
                 }
 
-                /*
-                 * Reject stale WPF coordinates.
-                 */
                 if (rectangle.Right <= 0 ||
                     rectangle.Bottom <= 0)
                 {
@@ -1412,10 +1212,6 @@ namespace SimulatorAutomation.Tests
                 return false;
             }
         }
-
-        // ============================================================
-        // OPEN WINDOWS SHORTCUT
-        // ============================================================
 
         protected static void OpenWindowsShortcut(
             string shortcutPath)
@@ -1441,10 +1237,6 @@ namespace SimulatorAutomation.Tests
 
             Process.Start(startInfo);
         }
-
-        // ============================================================
-        // FIND WINDOW BY TITLE
-        // ============================================================
 
         protected Window FindWindowByTitle(
             string expectedWindowTitle)
@@ -1487,9 +1279,7 @@ namespace SimulatorAutomation.Tests
                     }
                     catch
                     {
-                        /*
-                         * The matching desktop item was not a Window.
-                         */
+
                     }
                 }
             }
@@ -1502,10 +1292,6 @@ namespace SimulatorAutomation.Tests
 
             return null;
         }
-
-        // ============================================================
-        // WAIT FOR WINDOW BY TITLE
-        // ============================================================
 
         protected Window WaitForWindowByTitle(
             string expectedWindowTitle,
@@ -1539,10 +1325,6 @@ namespace SimulatorAutomation.Tests
             return null;
         }
 
-        // ============================================================
-        // FOCUS WINDOW SAFELY
-        // ============================================================
-
         protected static void FocusWindowSafely(
             Window window,
             string windowDescription)
@@ -1569,10 +1351,6 @@ namespace SimulatorAutomation.Tests
             }
         }
 
-        // ============================================================
-        // CASE-INSENSITIVE CONTAINS
-        // ============================================================
-
         protected static bool ContainsIgnoreCase(
             string completeText,
             string partialText)
@@ -1587,10 +1365,6 @@ namespace SimulatorAutomation.Tests
                        partialText,
                        StringComparison.OrdinalIgnoreCase) >= 0;
         }
-
-        // ============================================================
-        // LOG ELEMENT DETAILS
-        // ============================================================
 
         protected static void LogElementDetails(
             string description,
@@ -1645,10 +1419,6 @@ namespace SimulatorAutomation.Tests
                     exception.Message);
             }
         }
-
-        // ============================================================
-        // SAFE ELEMENT PROPERTY METHODS
-        // ============================================================
 
         protected static string GetElementNameSafely(
             AutomationElement element)
@@ -1725,10 +1495,6 @@ namespace SimulatorAutomation.Tests
             }
         }
 
-        // ============================================================
-        // PATIENT CREATION HELPERS
-        // ============================================================
-
         protected void ClickNewPatientButton()
         {
             TestContext.Progress.WriteLine(
@@ -1788,10 +1554,6 @@ namespace SimulatorAutomation.Tests
             Thread.Sleep(2000);
         }
 
-        // ============================================================
-        // WAIT FOR VISIBLE BUTTON BY EXACT NAME
-        // ============================================================
-
         protected AutomationElement WaitForVisibleButtonByExactName(
             string windowTitle,
             string expectedButtonName,
@@ -1842,10 +1604,6 @@ namespace SimulatorAutomation.Tests
 
             return null;
         }
-
-        // ============================================================
-        // FIND VISIBLE BUTTON BY EXACT NAME
-        // ============================================================
 
         protected AutomationElement FindVisibleButtonByExactName(
             Window parentWindow,
@@ -1975,12 +1733,6 @@ namespace SimulatorAutomation.Tests
 
             Thread.Sleep(1000);
 
-            /*
-             * Enter Last Name
-             *
-             * Important:
-             * FlaUInspect shows two colons before Last Name.
-             */
             AutomationElement lastNameField =
                 WaitForVisibleElementByAutomationId(
                     VisionPlannerWindowTitle,
@@ -2004,11 +1756,6 @@ namespace SimulatorAutomation.Tests
 
             Thread.Sleep(500);
 
-            /*
-             * Enter First Name
-             *
-             * FlaUInspect also shows two colons before First Name.
-             */
             AutomationElement firstNameField =
                 WaitForVisibleElementByAutomationId(
                     VisionPlannerWindowTitle,
@@ -2032,11 +1779,6 @@ namespace SimulatorAutomation.Tests
 
             Thread.Sleep(500);
 
-            /*
-             * Enter Date of Birth - Day
-             *
-             * FlaUInspect shows one colon for the DOB AutomationId.
-             */
             AutomationElement dobDayField =
                 WaitForVisibleElementByAutomationId(
                     VisionPlannerWindowTitle,
@@ -2056,9 +1798,6 @@ namespace SimulatorAutomation.Tests
 
             Thread.Sleep(500);
 
-            /*
-             * Find Date of Birth - Month
-             */
             AutomationElement dobMonthField =
                 WaitForVisibleElementByAutomationId(
                     VisionPlannerWindowTitle,
@@ -2077,9 +1816,6 @@ namespace SimulatorAutomation.Tests
 
             Thread.Sleep(500);
 
-            /*
-             * Find Date of Birth - Year
-             */
             AutomationElement dobYearField =
                 WaitForVisibleElementByAutomationId(
                     VisionPlannerWindowTitle,
@@ -2095,15 +1831,11 @@ namespace SimulatorAutomation.Tests
                "Date of Birth Month field",
                sensitive: false);
 
-
             Assert.That(
                 dobYearField,
                 Is.Not.Null,
                 "Date of Birth Year field was not found.");
 
-            /*
-             * Enter Patient ID
-             */
             AutomationElement patientIDField =
                 WaitForVisibleElementByAutomationId(
                     VisionPlannerWindowTitle,
@@ -2123,16 +1855,12 @@ namespace SimulatorAutomation.Tests
 
             Thread.Sleep(500);
 
-            /*
-             * Select Gender
-             */
             SelectPatientGender(
                 gender.Trim());
 
             TestContext.Progress.WriteLine(
                 "All patient details entered successfully.");
         }
-
 
         protected void SelectPatientGender(
             string gender)
@@ -2229,9 +1957,6 @@ namespace SimulatorAutomation.Tests
             TestContext.Progress.WriteLine(
                 "Save button clicked. Patient creation completed.");
         }
-        // ============================================================
-        // WAIT FOR CREATED PATIENT
-        // ============================================================
 
         protected AutomationElement WaitForCreatedPatient(
             string expectedPatientName,
@@ -2314,11 +2039,6 @@ namespace SimulatorAutomation.Tests
             return null;
         }
 
-
-        // ============================================================
-        // WAIT FOR VISIBLE TEXT BY EXACT NAME
-        // ============================================================
-
         protected AutomationElement WaitForVisibleElementByExactName(
             string expectedName,
             int timeoutMilliseconds)
@@ -2387,11 +2107,6 @@ namespace SimulatorAutomation.Tests
             return null;
         }
 
-
-        // ============================================================
-        // CREATE SAFE SCREENSHOT FILE NAME
-        // ============================================================
-
         protected static string CreateSafeFileName(
             string originalName)
         {
@@ -2421,11 +2136,6 @@ namespace SimulatorAutomation.Tests
 
             return safeName.Trim();
         }
-
-
-        // ============================================================
-        // TAKE PATIENT VERIFICATION SCREENSHOT
-        // ============================================================
 
         protected void TakePatientVerificationScreenshot(
             string patientName,
@@ -2519,11 +2229,6 @@ namespace SimulatorAutomation.Tests
             }
         }
 
-
-        // ============================================================
-        // VERIFY PATIENT CREATED SUCCESSFULLY
-        // ============================================================
-
         protected void VerifyPatientCreatedSuccessfully(
             string firstName,
             string lastName,
@@ -2603,9 +2308,6 @@ namespace SimulatorAutomation.Tests
 
             try
             {
-                // ----------------------------------------------------
-                // VERIFY PATIENT NAME
-                // ----------------------------------------------------
 
                 AutomationElement patientNameElement =
                     WaitForCreatedPatient(
@@ -2634,10 +2336,6 @@ namespace SimulatorAutomation.Tests
                     "Patient Name verified: " +
                     actualPatientName);
 
-                // ----------------------------------------------------
-                // VERIFY PATIENT ID
-                // ----------------------------------------------------
-
                 AutomationElement patientIdElement =
                     WaitForVisibleElementByExactName(
                         expectedPatientId,
@@ -2664,10 +2362,6 @@ namespace SimulatorAutomation.Tests
                 TestContext.Progress.WriteLine(
                     "Patient ID verified: " +
                     actualPatientId);
-
-                // ----------------------------------------------------
-                // VERIFY DATE OF BIRTH
-                // ----------------------------------------------------
 
                 AutomationElement dateOfBirthElement =
                     WaitForVisibleElementByExactName(
@@ -2713,19 +2407,11 @@ namespace SimulatorAutomation.Tests
                         ? "PASSED"
                         : "FAILED";
 
-                /*
-                 * Screenshot is taken whether the verification
-                 * passes or fails.
-                 */
                 TakePatientVerificationScreenshot(
                     expectedPatientName,
                     verificationResult);
             }
         }
-
-        // ============================================================
-        // SEARCH AND SELECT PATIENT BY MRN
-        // ============================================================
 
         protected void SearchAndSelectPatientByMrn(
             string patientMrn)
@@ -2766,13 +2452,6 @@ namespace SimulatorAutomation.Tests
 
             Thread.Sleep(1000);
 
-            /*
-             * Locate the search textbox.
-             *
-             * FlaUInspect:
-             * AutomationId = Search Item
-             * ControlType  = Edit
-             */
             AutomationElement searchTextBox =
                 WaitForVisibleElementByAutomationId(
                     VisionPlannerWindowTitle,
@@ -2791,9 +2470,6 @@ namespace SimulatorAutomation.Tests
                 "Patient search field",
                 searchTextBox);
 
-            /*
-             * Clear any old search value and enter the MRN.
-             */
             SetTextUsingKeyboard(
                 searchTextBox,
                 patientMrn,
@@ -2804,16 +2480,8 @@ namespace SimulatorAutomation.Tests
                 "Patient MRN entered in search field: " +
                 patientMrn);
 
-            /*
-             * Allow Vision Planner to filter the patient list.
-             */
             Thread.Sleep(1500);
 
-            /*
-             * Vision Planner displays the MRN as:
-             *
-             * Id: ARP6
-             */
             AutomationElement patientResult =
                 WaitForPatientSearchResultByMrn(
                     patientMrn,
@@ -2834,11 +2502,6 @@ namespace SimulatorAutomation.Tests
                 "Patient search result found: " +
                 actualPatientIdText);
 
-            /*
-             * Click the visible MRN text inside the patient result tile.
-             * A physical click is used because the Text control does not
-             * expose InvokePattern in the attached FlaUInspect view.
-             */
             ClickElementCenterWithMouse(
                 patientResult,
                 "Patient search result for MRN " +
@@ -2846,9 +2509,6 @@ namespace SimulatorAutomation.Tests
 
             Thread.Sleep(1500);
 
-            /*
-             * Verify that the result still exists after selection.
-             */
             AutomationElement selectedPatientResult =
                 WaitForPatientSearchResultByMrn(
                     patientMrn,
@@ -2875,11 +2535,6 @@ namespace SimulatorAutomation.Tests
             TestContext.Progress.WriteLine(
                 "================================================");
         }
-
-
-        // ============================================================
-        // WAIT FOR PATIENT SEARCH RESULT BY MRN
-        // ============================================================
 
         protected AutomationElement WaitForPatientSearchResultByMrn(
             string patientMrn,
@@ -2957,9 +2612,6 @@ namespace SimulatorAutomation.Tests
 
             return null;
         }
-        // ============================================================
-        // READ SELECTED PATIENT FROM VISION PLANNER
-        // ============================================================
 
         protected void ReadSelectedPatientFromVisionPlanner(
             string patientMrn,
@@ -3021,11 +2673,6 @@ namespace SimulatorAutomation.Tests
                         element)
                     .Trim();
 
-                /*
-                 * Selected patient name:
-                 *
-                 * AutomationId = MarkedNameText
-                 */
                 if (string.Equals(
                         automationId,
                         CreatedPatientNameAutomationId,
@@ -3035,12 +2682,6 @@ namespace SimulatorAutomation.Tests
                         elementName;
                 }
 
-                /*
-                 * Selected patient DOB:
-                 *
-                 * Vision Planner displays a Text element such as:
-                 * 04/11/1988
-                 */
                 if (IsPatientDateText(
                         elementName))
                 {
@@ -3086,11 +2727,6 @@ namespace SimulatorAutomation.Tests
                 selectedPatientDateOfBirth);
         }
 
-
-        // ============================================================
-        // CHECK WHETHER TEXT IS A PATIENT DATE
-        // ============================================================
-
         protected static bool IsPatientDateText(
             string text)
         {
@@ -3120,11 +2756,6 @@ namespace SimulatorAutomation.Tests
                 System.Globalization.DateTimeStyles.None,
                 out parsedDate);
         }
-
-
-        // ============================================================
-        // CLICK NEW IMAGE GUIDED MEASUREMENT
-        // ============================================================
 
         protected void ClickNewImageGuidedMeasurementButton()
         {
@@ -3236,10 +2867,6 @@ namespace SimulatorAutomation.Tests
                 "New Image Guided Measurement button",
                 measurementButton);
 
-            /*
-             * Use the physical mouse click because this already works
-             * reliably with the other Vision Planner controls.
-             */
             ClickElementCenterWithMouse(
                 measurementButton,
                 "New Image Guided Measurement button");
@@ -3248,25 +2875,14 @@ namespace SimulatorAutomation.Tests
                 "New Image Guided Measurement button clicked.");
         }
 
-        // ============================================================
-        // WAIT FOR MOVU MEASUREMENT SCREEN
-        // ============================================================
-
         protected Window WaitForMovuMeasurementScreen()
         {
             TestContext.Progress.WriteLine(
                 "Waiting for Vision Planner to transfer the " +
                 "selected patient to MOVU.");
 
-            /*
-             * Allow Vision Planner to complete the handoff.
-             */
             Thread.Sleep(5000);
 
-            /*
-             * MOVU is already running but is behind Vision Planner
-             * or Visual Studio. Click the visible MOVU taskbar button.
-             */
             ClickMovuTaskbarButton();
 
             Stopwatch stopwatch =
@@ -3294,11 +2910,6 @@ namespace SimulatorAutomation.Tests
                         continue;
                     }
 
-                    /*
-                     * FlaUInspect shows the measurement screen under:
-                     *
-                     * AutomationId = Mainy
-                     */
                     AutomationElement measurementControl =
                         movuWindow.FindFirstDescendant(
                             _automation.ConditionFactory
@@ -3350,9 +2961,6 @@ namespace SimulatorAutomation.Tests
                 "MOVU measurement screen was not displayed after " +
                 "clicking the MOVU taskbar button.");
 
-            /*
-             * Focus after the physical taskbar click.
-             */
             FocusWindowSafely(
                 readyMovuWindow,
                 "MOVU");
@@ -3364,9 +2972,6 @@ namespace SimulatorAutomation.Tests
 
             return readyMovuWindow;
         }
-        // ============================================================
-        // VERIFY THE SELECTED PATIENT IS DISPLAYED IN MOVU
-        // ============================================================
 
         protected void VerifyPatientDisplayedInMovu(
             Window movuWindow,
@@ -3423,10 +3028,7 @@ namespace SimulatorAutomation.Tests
             {
                 try
                 {
-                    /*
-                     * Re-find MOVU because its automation tree may be
-                     * recreated when measurement mode opens.
-                     */
+
                     movuWindow =
                         FindWindowByTitle(
                             MovuWindowTitle);
@@ -3450,9 +3052,6 @@ namespace SimulatorAutomation.Tests
                                 continue;
                             }
 
-                            /*
-                             * Match the patient name.
-                             */
                             if (string.Equals(
                                     elementText,
                                     expectedPatientName.Trim(),
@@ -3462,10 +3061,6 @@ namespace SimulatorAutomation.Tests
                                     elementText;
                             }
 
-                            /*
-                             * Vision Planner and MOVU can display DOB
-                             * with day and month reversed.
-                             */
                             bool originalDateMatches =
                                 string.Equals(
                                     elementText,
@@ -3570,11 +3165,6 @@ namespace SimulatorAutomation.Tests
                 "================================================");
         }
 
-
-        // ============================================================
-        // REVERSE DATE DAY AND MONTH
-        // ============================================================
-
         protected static string ReversePatientDate(
             string dateOfBirth)
         {
@@ -3615,10 +3205,6 @@ namespace SimulatorAutomation.Tests
                    yearPart;
         }
 
-        // ============================================================
-        // CLICK MOVU BUTTON ON WINDOWS TASKBAR
-        // ============================================================
-
         protected void ClickMovuTaskbarButton()
         {
             TestContext.Progress.WriteLine(
@@ -3648,9 +3234,6 @@ namespace SimulatorAutomation.Tests
                             GetControlTypeSafely(
                                 element);
 
-                        /*
-                         * Ignore every element that is not a button.
-                         */
                         if (controlType.IndexOf(
                                 "Button",
                                 StringComparison.OrdinalIgnoreCase) < 0)
@@ -3784,9 +3367,6 @@ namespace SimulatorAutomation.Tests
             TestContext.Progress.WriteLine(
                 "MOVU taskbar button clicked.");
         }
-        // ============================================================
-        // CAPTURE ONE MEASUREMENT FOR OD AND ONE MEASUREMENT FOR OS
-        // ============================================================
 
         protected void CaptureMeasurementsForBothEyes()
         {
@@ -3817,25 +3397,9 @@ namespace SimulatorAutomation.Tests
 
             Thread.Sleep(1000);
 
-            /*
-             * OD sequence:
-             *
-             * 1. Click OD once.
-             * 2. Click Joystick once.
-             * 3. Click Accept once.
-             * 4. MOVU automatically shifts to OS.
-             */
             CaptureSingleOdMeasurement();
 
-            /*
-             * OS sequence:
-             *
-             * 1. Do not click OS.
-             * 2. Click Joystick twice.
-             * 3. Click Accept once.
-             */
             CaptureSingleOsMeasurement();
-
 
             TestContext.Progress.WriteLine(
                 "================================================");
@@ -3852,10 +3416,6 @@ namespace SimulatorAutomation.Tests
             TestContext.Progress.WriteLine(
                 "================================================");
         }
-
-        // ============================================================
-        // CAPTURE ONE OD MEASUREMENT
-        // ============================================================
 
         protected void CaptureSingleOdMeasurement()
         {
@@ -3883,10 +3443,6 @@ namespace SimulatorAutomation.Tests
 
             Thread.Sleep(500);
 
-            // ========================================================
-            // STEP 1: CLICK OD ONCE
-            // ========================================================
-
             ClickMovuButtonByAutomationId(
                 MovuOdButtonAutomationId,
                 "OD button");
@@ -3896,10 +3452,6 @@ namespace SimulatorAutomation.Tests
 
             Thread.Sleep(700);
 
-            // ========================================================
-            // STEP 2: CLICK JOYSTICK ONCE
-            // ========================================================
-
             ClickMovuButtonByAutomationId(
                 MovuJoystickButtonAutomationId,
                 "Joystick button for OD");
@@ -3907,15 +3459,8 @@ namespace SimulatorAutomation.Tests
             TestContext.Progress.WriteLine(
                 "Joystick clicked once for OD.");
 
-            /*
-             * Wait for MOVU to generate the OD measurement result.
-             */
             Thread.Sleep(
                 MovuMeasurementProcessingWaitMilliseconds);
-
-            // ========================================================
-            // STEP 3: CLICK ACCEPT ONCE
-            // ========================================================
 
             ClickMovuAcceptButton(
                 "OD",
@@ -3930,17 +3475,11 @@ namespace SimulatorAutomation.Tests
             TestContext.Progress.WriteLine(
                 "MOVU should now automatically shift to OS.");
 
-            /*
-             * Give MOVU time to switch from OD to OS.
-             */
             Thread.Sleep(1500);
 
             TestContext.Progress.WriteLine(
                 "------------------------------------------------");
         }
-        // ============================================================
-        // CAPTURE ONE OS MEASUREMENT
-        // ============================================================
 
         protected void CaptureSingleOsMeasurement()
         {
@@ -3971,17 +3510,6 @@ namespace SimulatorAutomation.Tests
 
             Thread.Sleep(500);
 
-            /*
-             * Do not click the OD button.
-             * Do not click the OS button.
-             *
-             * MOVU automatically moved to OS after accepting OD.
-             */
-
-            // ========================================================
-            // STEP 1: CLICK JOYSTICK FIRST TIME
-            // ========================================================
-
             ClickMovuButtonByAutomationId(
                 MovuJoystickButtonAutomationId,
                 "Joystick button for OS, first click");
@@ -3991,15 +3519,6 @@ namespace SimulatorAutomation.Tests
 
             Thread.Sleep(700);
 
-            // ========================================================
-            // STEP 2: CLICK JOYSTICK SECOND TIME
-            // ========================================================
-
-            /*
-             * ClickMovuButtonByAutomationId re-finds the Joystick
-             * element, which avoids using a stale WPF element after
-             * the first click.
-             */
             ClickMovuButtonByAutomationId(
                 MovuJoystickButtonAutomationId,
                 "Joystick button for OS, second click");
@@ -4007,15 +3526,8 @@ namespace SimulatorAutomation.Tests
             TestContext.Progress.WriteLine(
                 "Joystick second click completed for OS.");
 
-            /*
-             * Wait for MOVU to generate the OS measurement result.
-             */
             Thread.Sleep(
                 MovuMeasurementProcessingWaitMilliseconds);
-
-            // ========================================================
-            // STEP 3: CLICK ACCEPT ONCE
-            // ========================================================
 
             ClickMovuAcceptButton(
                 "OS",
@@ -4030,10 +3542,6 @@ namespace SimulatorAutomation.Tests
             TestContext.Progress.WriteLine(
                 "------------------------------------------------");
         }
-
-        // ============================================================
-        // CLICK MOVU BUTTON BY AUTOMATION ID
-        // ============================================================
 
         protected void ClickMovuButtonByAutomationId(
             string automationId,
@@ -4086,11 +3594,6 @@ namespace SimulatorAutomation.Tests
                 buttonDescription,
                 button);
 
-            /*
-             * The screenshots show that OD, OS, and Joystick are parent
-             * Button elements. Physical clicking is used because the
-             * child Text elements do not expose InvokePattern.
-             */
             ClickElementCenterWithMouse(
                 button,
                 buttonDescription);
@@ -4099,11 +3602,6 @@ namespace SimulatorAutomation.Tests
                 buttonDescription +
                 " clicked successfully.");
         }
-
-
-        // ============================================================
-        // WAIT FOR MOVU ELEMENT BY AUTOMATION ID
-        // ============================================================
 
         protected AutomationElement WaitForMovuElementByAutomationId(
             string automationId,
@@ -4157,11 +3655,6 @@ namespace SimulatorAutomation.Tests
             return null;
         }
 
-
-        // ============================================================
-        // CLICK MOVU ACCEPT BUTTON
-        // ============================================================
-
         protected void ClickMovuAcceptButton(
             string eyeDescription,
             int measurementNumber)
@@ -4213,10 +3706,6 @@ namespace SimulatorAutomation.Tests
                 measurementNumber +
                 ".");
         }
-
-        // ============================================================
-        // CLICK MOVU FINISH BUTTON
-        // ============================================================
 
         protected void ClickMovuFinishButton()
         {
@@ -4273,10 +3762,6 @@ namespace SimulatorAutomation.Tests
             TestContext.Progress.WriteLine(
                 "Finish button clicked successfully.");
 
-            /*
-             * Wait only until the confirmation popup appears.
-             * Do not click Yes inside this method.
-             */
             AutomationElement yesButton =
                 WaitForFinishConfirmationYesButton(
                     MovuFinishConfirmationTimeoutMilliseconds);
@@ -4292,10 +3777,6 @@ namespace SimulatorAutomation.Tests
             TestContext.Progress.WriteLine(
                 "Finish confirmation popup displayed successfully.");
         }
-
-        // ============================================================
-        // CLICK YES ON MOVU FINISH CONFIRMATION
-        // ============================================================
 
         protected void ClickMovuFinishConfirmationYesButton()
         {
@@ -4348,9 +3829,6 @@ namespace SimulatorAutomation.Tests
             TestContext.Progress.WriteLine(
                 "Finish confirmation popup closed successfully.");
         }
-        // ============================================================
-        // WAIT FOR FINISH CONFIRMATION YES BUTTON
-        // ============================================================
 
         protected AutomationElement WaitForFinishConfirmationYesButton(
             int timeoutMilliseconds)
@@ -4363,12 +3841,7 @@ namespace SimulatorAutomation.Tests
             {
                 try
                 {
-                    /*
-                     * The confirmation popup is displayed under the MOVU
-                     * application. Search the complete desktop because modal
-                     * windows may not be returned as descendants of the
-                     * original MOVU window.
-                     */
+
                     AutomationElement desktop =
                         _automation.GetDesktop();
 
@@ -4430,9 +3903,6 @@ namespace SimulatorAutomation.Tests
 
             return null;
         }
-        // ============================================================
-        // WAIT FOR FINISH CONFIRMATION TO CLOSE
-        // ============================================================
 
         protected bool WaitForFinishConfirmationToClose(
             int timeoutMilliseconds)
@@ -4448,15 +3918,6 @@ namespace SimulatorAutomation.Tests
                     AutomationElement yesButton =
                         FindFinishConfirmationYesButton();
 
-                    /*
-                     * WPF can keep an old control in the automation tree
-                     * after the popup closes.
-                     *
-                     * The confirmation is considered closed when:
-                     *
-                     * 1. The Yes button no longer exists, or
-                     * 2. The Yes button exists but is no longer visible.
-                     */
                     if (yesButton == null ||
                         !IsElementVisible(yesButton))
                     {
@@ -4468,10 +3929,7 @@ namespace SimulatorAutomation.Tests
                 }
                 catch (Exception exception)
                 {
-                    /*
-                     * A stale or unavailable Yes button normally means
-                     * the confirmation popup has closed.
-                     */
+
                     TestContext.Progress.WriteLine(
                         "Finish confirmation popup is no longer readable: " +
                         exception.Message);
@@ -4492,9 +3950,6 @@ namespace SimulatorAutomation.Tests
 
             return false;
         }
-        // ============================================================
-        // FIND FINISH CONFIRMATION YES BUTTON
-        // ============================================================
 
         protected AutomationElement FindFinishConfirmationYesButton()
         {
@@ -4546,36 +4001,16 @@ namespace SimulatorAutomation.Tests
 
             return null;
         }
-        // ============================================================
-        // MEASUREMENT EXPORT VERIFICATION
-        // ============================================================
 
-       
-        protected const int MeasurementExportTimeoutMilliseconds =
-            180000;
+        protected const int MeasurementExportTimeoutMilliseconds = 180000;
 
-        protected const int RequiredDxIconCount =
-            2;
+        protected const int RequiredDxIconCount = 2;
 
-        protected const int MeasurementExportPollingMilliseconds =
-            1000;
-        // ============================================================
-        // MEASUREMENT EXPORT VERIFICATION
-        // ============================================================
+        protected const int MeasurementExportPollingMilliseconds = 1000;
 
-        protected const string MeasurementExportDetailsButtonAutomationId =
-            "DiagnosticAvsDnaExportDetailsBtn";
+        protected const string MeasurementExportDetailsButtonAutomationId = "DiagnosticAvsDnaExportDetailsBtn";
 
-        protected const int RequiredExportDetailsButtonCount =
-            2;
-
-        // ============================================================
-        // VERIFY MEASUREMENTS EXPORTED SUCCESSFULLY
-        // ============================================================
-
-        // ============================================================
-        // VERIFY MEASUREMENTS EXPORTED SUCCESSFULLY
-        // ============================================================
+        protected const int RequiredExportDetailsButtonCount = 2;
 
         protected void VerifyMeasurementsExportedSuccessfully()
         {
@@ -4636,9 +4071,6 @@ namespace SimulatorAutomation.Tests
             TestContext.Progress.WriteLine(
                 "================================================");
         }
-        // ============================================================
-        // WAIT FOR MEASUREMENT EXPORT SUCCESS
-        // ============================================================
 
         protected bool WaitForMeasurementExportSuccess(
             int requiredButtonCount,
@@ -4721,9 +4153,6 @@ namespace SimulatorAutomation.Tests
 
             return false;
         }
-        // ============================================================
-        // COUNT VISIBLE MEASUREMENT EXPORT BUTTONS
-        // ============================================================
 
         protected int CountVisibleMeasurementExportButtons(
             Window visionPlannerWindow)
@@ -4817,10 +4246,6 @@ namespace SimulatorAutomation.Tests
             return matchingButtonCount;
         }
 
-        // ============================================================
-        // PATIENT CREATION EXCEL TEST CASES
-        // ============================================================
-
         public static IEnumerable<TestCaseData>
             PatientCreationTestCases()
         {
@@ -4840,10 +4265,6 @@ namespace SimulatorAutomation.Tests
             }
         }
 
-        // ============================================================
-        // CAPTURE-MEASUREMENT EXCEL TEST CASES
-        // ============================================================
-
         public static IEnumerable<TestCaseData>
             CaptureMeasurementTestCases()
         {
@@ -4862,9 +4283,6 @@ namespace SimulatorAutomation.Tests
                             row.PatientMrn);
             }
         }
-        // ============================================================
-        // CLICK BACK TO PATIENT LIST
-        // ============================================================
 
         protected void ClickBackToPatientListButton()
         {
@@ -4934,9 +4352,6 @@ namespace SimulatorAutomation.Tests
             TestContext.Progress.WriteLine(
                 "Patient List screen displayed successfully.");
         }
-        // ============================================================
-        // WAIT FOR PATIENT LIST SCREEN
-        // ============================================================
 
         protected bool WaitForPatientListScreen(
             int timeoutMilliseconds)
@@ -4960,10 +4375,6 @@ namespace SimulatorAutomation.Tests
                         continue;
                     }
 
-                    /*
-                     * The patient-list screen exposes the patient-search
-                     * field with AutomationId "Search Item".
-                     */
                     AutomationElement searchField =
                         visionPlannerWindow.FindFirstDescendant(
                             _automation.ConditionFactory
@@ -4979,10 +4390,6 @@ namespace SimulatorAutomation.Tests
                         return true;
                     }
 
-                    /*
-                     * Fallback verification:
-                     * the Back button should no longer be visible.
-                     */
                     AutomationElement backButton =
                         visionPlannerWindow.FindFirstDescendant(
                             _automation.ConditionFactory
@@ -5016,9 +4423,6 @@ namespace SimulatorAutomation.Tests
 
             return false;
         }
-        // ============================================================
-        // ONE-TIME CLEANUP
-        // ============================================================
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
