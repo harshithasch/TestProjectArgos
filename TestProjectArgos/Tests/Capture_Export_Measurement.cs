@@ -1,22 +1,26 @@
-﻿using System;
-using System.Threading;
-
-using FlaUI.Core.AutomationElements;
-
+﻿using FlaUI.Core.AutomationElements;
 using NUnit.Framework;
-
 using SimulatorAutomation.Tests.Framework;
+using System;
+using System.Threading;
+using TestProjectArgos.Framework;
 
 namespace SimulatorAutomation.Tests
 {
     public partial class SimulatorWorkflowTests
     {
         [TestCaseSource(nameof(CaptureMeasurementTestCases))]
-            [OrderAttribute(5)]
+        [OrderAttribute(5)]
         [Category(TestSuiteNames.CaptureMeasurement)]
         public void Capture_Export_Measurement(
     CaptureMeasurementData testData)
         {
+            RunCaptureExportMeasurementWorkflow(testData);
+        }
+
+        public void RunCaptureExportMeasurementWorkflow(
+            CaptureMeasurementData testData)
+        { 
             string result =
                 "FAILED: Test did not complete";
 
@@ -54,14 +58,20 @@ namespace SimulatorAutomation.Tests
                 // STEP 1: VERIFY VISION PLANNER IS OPEN
                 // ====================================================
 
+                TestContext.Progress.WriteLine(
+     "Waiting for Vision Planner window after surgeon login.");
+
                 Window visionPlannerWindow =
-                    FindWindowByTitle(
-                        VisionPlannerWindowTitle);
+                    WaitForWindowByTitle(
+                        VisionPlannerWindowTitle,
+                        VisionPlannerWindowSearchTimeoutMilliseconds);
 
                 Assert.That(
                     visionPlannerWindow,
                     Is.Not.Null,
-                    "Vision Planner window is not open.");
+                    "Vision Planner window was not found after surgeon login. " +
+                    "Expected title: " +
+                    VisionPlannerWindowTitle);
 
                 FocusWindowSafely(
                     visionPlannerWindow,
@@ -110,6 +120,9 @@ namespace SimulatorAutomation.Tests
                 TestContext.Progress.WriteLine(
                     "Selected Patient DOB: " +
                     selectedPatientDateOfBirth);
+                PptScreenshotReport.CaptureDesktopScreenshot(
+                        "Captured screenshot for search patient in Argos",
+                        "Patient visible in Argos");
 
                 // ====================================================
                 // STEP 4: START IMAGE-GUIDED MEASUREMENT
@@ -149,7 +162,9 @@ namespace SimulatorAutomation.Tests
 
                 TestContext.Progress.WriteLine(
                     "OD and OS measurements captured successfully.");
-
+                PptScreenshotReport.CaptureDesktopScreenshot(
+                        "Captured screenshot of measurements",
+                        "Measurement capture in Argos");
                 // ====================================================
                 // STEP 8: CLICK FINISH
                 // ====================================================
@@ -176,7 +191,9 @@ namespace SimulatorAutomation.Tests
 
                 TestContext.Progress.WriteLine(
                     "Measurement export verified successfully.");
-
+                PptScreenshotReport.CaptureDesktopScreenshot(
+                        "Captured screenshot for measurement export in Argos",
+                        "DX export icon verification");
                 // ====================================================
                 // STEP 11: RETURN TO PATIENT LIST
                 // ====================================================
@@ -241,13 +258,26 @@ namespace SimulatorAutomation.Tests
             }
             finally
             {
-                /*
-                 * This always executes, whether the row passed or failed.
-                 */
-                ExcelConfigReader.UpdateTestResult(
-               "Capturemeasurement",
-        testData.ExcelRowNumber,
-                    result);
+                if (testData != null &&
+                    testData.ExcelRowNumber > 0)
+                {
+                    ExcelConfigReader.UpdateTestResult(
+                        "Capturemeasurement",
+                        testData.ExcelRowNumber,
+                        result);
+
+                    TestContext.Progress.WriteLine(
+                        "Capture-measurement result updated in Excel. Row: " +
+                        testData.ExcelRowNumber);
+                }
+                else
+                {
+                    TestContext.Progress.WriteLine(
+                        "[INFO] Excel result update skipped. " +
+                        "The capture workflow was called from the " +
+                        "ADI-Argos integration test and has no Capturemeasurement " +
+                        "Excel row.");
+                }
             }
         }
 

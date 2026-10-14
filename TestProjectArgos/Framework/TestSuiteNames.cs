@@ -13,5 +13,9 @@
 
         public const string CaptureMeasurement =
             "4_CaptureMeasurement";
+
+        public const string ADIWorkflows =
+            "5_ADIWorkflows";
+        
     }
 }

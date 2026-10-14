@@ -1,10 +1,9 @@
-﻿using System.IO;
-using System.Threading;
-
-using FlaUI.Core.AutomationElements;
-
+﻿using FlaUI.Core.AutomationElements;
 using NUnit.Framework;
 using SimulatorAutomation.Tests.Framework;
+using System.IO;
+using System.Threading;
+using TestProjectArgos.Framework;
 
 namespace SimulatorAutomation.Tests
 {
@@ -13,8 +12,13 @@ namespace SimulatorAutomation.Tests
         [Test]
         [Order(2)]
         [Category(TestSuiteNames.LaunchApplications)]
-        public void LaunchVPTest()
+        public void LaunchVPtest()
         {
+            RunLaunchVisionPlannerWorkflow();
+        }
+
+        public void RunLaunchVisionPlannerWorkflow()
+        { 
             TestContext.Progress.WriteLine(
                 "================================================");
 

@@ -1,11 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Threading;
-
-using FlaUI.Core.AutomationElements;
-
+﻿using FlaUI.Core.AutomationElements;
 using NUnit.Framework;
 using SimulatorAutomation.Tests.Framework;
+using System;
+using System.IO;
+using System.Threading;
+using TestProjectArgos.Framework;
 
 namespace SimulatorAutomation.Tests
 {
@@ -14,8 +13,12 @@ namespace SimulatorAutomation.Tests
         [Test]
         [Order(3)]
         [Category(TestSuiteNames.SurgeonLogin)]
-        public void SurgeonLoginTest()
+        public void ArgosSurgeonLogintest()
         {
+            RunArgosSurgeonLoginWorkflow();
+        }
+        public void RunArgosSurgeonLoginWorkflow()
+        {       
             TestContext.Progress.WriteLine(
                 "================================================");
 
@@ -154,6 +157,9 @@ namespace SimulatorAutomation.Tests
             TestContext.Progress.WriteLine(
                 "Surgeon login completed successfully.");
             Thread.Sleep(6000);
+
         }
+
+
     }
 }

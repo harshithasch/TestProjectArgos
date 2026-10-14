@@ -54,11 +54,11 @@ namespace SimulatorAutomation.Tests
                     visionPlannerWindow,
                     "Vision Planner");
 
-                Thread.Sleep(500);
+                Thread.Sleep(5000);
 
                 ClickNewPatientButton();
 
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
 
                 string dobDay;
                 string dobMonth;
@@ -78,8 +78,9 @@ namespace SimulatorAutomation.Tests
                     dobYear,
                     testData.PatientID,
                     testData.PatientGender);
-
+                Thread.Sleep(500);
                 ClickSavePatientButton();
+                Thread.Sleep(500);
 
                 /*
                  * Verify the newly created patient before returning to the

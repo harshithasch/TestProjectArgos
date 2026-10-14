@@ -1,22 +1,66 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+	<UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Actions\**" />
+    <Compile Remove="Configuration\**" />
+    <Compile Remove="Integration\**" />
+    <Compile Remove="Models\**" />
+    <Compile Remove="TestInfrastructure\**" />
+    <Compile Remove="TestSuites\**" />
+    <Compile Remove="Workflows\**" />
+    <EmbeddedResource Remove="Actions\**" />
+    <EmbeddedResource Remove="Configuration\**" />
+    <EmbeddedResource Remove="Integration\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <EmbeddedResource Remove="TestInfrastructure\**" />
+    <EmbeddedResource Remove="TestSuites\**" />
+    <EmbeddedResource Remove="Workflows\**" />
+    <None Remove="Actions\**" />
+    <None Remove="Configuration\**" />
+    <None Remove="Integration\**" />
+    <None Remove="Models\**" />
+    <None Remove="TestInfrastructure\**" />
+    <None Remove="TestSuites\**" />
+    <None Remove="Workflows\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Core\WebAutomationHelper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Framework\ScreenshotTemplate.pptx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <TargetPath>ScreenshotTemplate.pptx</TargetPath>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.105.1" />
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.5.1" />
+    <PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
     <PackageReference Include="FlaUI.Core" Version="5.0.0" />
     <PackageReference Include="FlaUI.UIA3" Version="5.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NUnit" Version="4.6.1" />
     <PackageReference Include="NUnit.Analyzers" Version="4.7.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="6.3.0" />
+    <PackageReference Include="Selenium.Support" Version="4.50.0" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.50.0" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="154.0.8037.9200" />
+    <PackageReference Include="System.Drawing.Common" Version="10.0.12" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,9 +68,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\" />
     <Folder Include="Test data\" />
     <Folder Include="Screenshots\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Core\WebAutomationHelper.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,5 +81,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
+	<ItemGroup>
+		<None Update="Drivers\chromedriver.exe">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	
 </Project>

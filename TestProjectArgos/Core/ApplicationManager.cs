@@ -6,6 +6,7 @@ using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Tools;
 using FlaUI.UIA3;
+using FlaUIApplication = FlaUI.Core.Application;
 
 namespace SimulatorAutomation.Core
 {
@@ -13,7 +14,7 @@ namespace SimulatorAutomation.Core
     {
         private UIA3Automation _automation;
 
-        public Application VisionPlannerApplication { get; private set; }
+        public FlaUIApplication VisionPlannerApplication { get; private set; }  
 
         public Window VisionPlannerWindow { get; private set; }
 
@@ -49,7 +50,7 @@ namespace SimulatorAutomation.Core
                 timeout: TimeSpan.FromMinutes(5));
 
             VisionPlannerApplication =
-                Application.Attach(visionPlannerProcess);
+                FlaUIApplication.Attach(visionPlannerProcess);
 
             VisionPlannerWindow = WaitForApplicationWindow(
                 application: VisionPlannerApplication,
@@ -151,7 +152,7 @@ namespace SimulatorAutomation.Core
         /// If a title is provided, the matching window is selected.
         /// </summary>
         private Window WaitForApplicationWindow(
-            Application application,
+            FlaUIApplication application,
             string expectedWindowTitle,
             TimeSpan timeout)
         {

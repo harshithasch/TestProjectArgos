@@ -1325,6 +1325,7 @@ namespace SimulatorAutomation.Tests
             return null;
         }
 
+
         protected static void FocusWindowSafely(
             Window window,
             string windowDescription)
@@ -1350,6 +1351,102 @@ namespace SimulatorAutomation.Tests
                     exception.Message);
             }
         }
+        public void MinimizeVisionPlanner()
+        {
+            try
+            {
+                TestContext.Progress.WriteLine(
+                    "Minimizing Vision Planner.");
+
+                var visionPlannerWindow =
+                    WaitForWindowByTitle(
+                        VisionPlannerWindowTitle,
+                        VisionPlannerWindowSearchTimeoutMilliseconds);
+
+                if (visionPlannerWindow == null)
+                {
+                    TestContext.Progress.WriteLine(
+                        "[WARNING] Vision Planner window was not found.");
+                    return;
+                }
+
+                if (visionPlannerWindow.Patterns.Window.IsSupported)
+                {
+                    visionPlannerWindow
+                        .Patterns
+                        .Window
+                        .Pattern.SetWindowVisualState(
+    WindowVisualState.Minimized);
+
+                    Thread.Sleep(500);
+
+                    TestContext.Progress.WriteLine(
+                        "Vision Planner minimized successfully.");
+                }
+                else
+                {
+                    TestContext.Progress.WriteLine(
+                        "[WARNING] Vision Planner window pattern " +
+                        "does not support minimize.");
+                }
+            }
+            catch (Exception exception)
+            {
+                TestContext.Progress.WriteLine(
+                    "[WARNING] Unable to minimize Vision Planner: " +
+                    exception.Message);
+            }
+        }
+        public void MinimizeMovu()
+{
+    try
+    {
+        TestContext.Progress.WriteLine(
+            "Looking for MOVU window to minimize.");
+
+        Window movuWindow =
+            WaitForWindowByTitle(
+                MovuWindowTitle,
+                MovuWindowSearchTimeoutMilliseconds);
+
+        if (movuWindow == null)
+        {
+            TestContext.Progress.WriteLine(
+                "[WARNING] MOVU window was not found.");
+
+            return;
+        }
+
+        TestContext.Progress.WriteLine(
+            "MOVU window found: " +
+            movuWindow.Title);
+
+        if (movuWindow.Patterns.Window.IsSupported)
+        {
+            movuWindow.Patterns.Window.Pattern
+                .SetWindowVisualState(
+                    FlaUI.Core.Definitions
+                        .WindowVisualState.Minimized);
+
+            Thread.Sleep(500);
+
+            TestContext.Progress.WriteLine(
+                "MOVU minimized successfully.");
+
+            return;
+        }
+
+        TestContext.Progress.WriteLine(
+            "[WARNING] MOVU WindowPattern is not supported.");
+    }
+    catch (Exception exception)
+    {
+        TestContext.Progress.WriteLine(
+            "[WARNING] Unable to minimize MOVU: " +
+            exception.Message);
+    }
+}
+
 
         protected static bool ContainsIgnoreCase(
             string completeText,
@@ -4423,6 +4520,8 @@ namespace SimulatorAutomation.Tests
 
             return false;
         }
+    
+
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
